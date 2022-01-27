@@ -71,7 +71,7 @@ class Deslizadores {
         this.slMRadio.position(10, 30);
         this.slMRadio.style("width", "200px");
         // B
-        this.slB = createSlider(-5000, 5000, 500, 1);
+        this.slB = createSlider(0, 10000, 500, 1);
         this.slB.position(10, 50);
         this.slB.style("width", "200px");
         // modificadorB
@@ -83,13 +83,13 @@ class Deslizadores {
         this.slC.position(10, 90);
         this.slC.style("width", "200px");
         // modificadorC
-        this.slMC = createSlider(0, 0.01, 0, 0.00001);
+        this.slMC = createSlider(0, 0.005, 0, 0.00001);
         this.slMC.position(10, 110);
         this.slMC.style("width", "200px");
         // puntos
-        this.slPuntos = createSlider(5, 25, 5.1, 0.01);
+        this.slPuntos = createSlider(5, 25, 13.31, 0.01);
         this.slPuntos.position(10, 130);
-        this.slPuntos.style("width", "700px");
+        this.slPuntos.style("width", "200px");
         // iteraciones
         this.slIteraciones = createSlider(1, 200, 30, 1);
         this.slIteraciones.position(10, 150);
