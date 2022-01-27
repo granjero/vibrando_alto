@@ -22,23 +22,23 @@ void draw()
   rotate(TWO_PI * 0.25);
   background(255);
 
-  float m = 0.053;
-  A = 247;
-  B = -37;
-  C = 15.333;
+  float m = 0.047;
+  A = 1435;
+  B = 523;
+  C = 17.332;
 
-  puntos = 49.38;
+  puntos = 24.63;
 
   //ciclo = new Ciclo(puntos, A, B, C, FI);
   beginShape();
 
-  for (int i = 0; i < 196; i++)
+  for (int i = 0; i < 71; i++)
   {    
     ciclo = new Ciclo(puntos, A, B, C);
 
-    A += 110.23;
-    B += 0.32;
-    C += 0.0452;
+    A += 110.77;
+    B += 14.51;
+    C += 0.0779;
     ciclo.dibujar(m, m);
   }
   endShape();

@@ -1,64 +1,127 @@
-let segundos = 0;
-let slRadio;
-let slB;
-let slMB;
-let slC;
 let deslizadores;
+let Xc;
+let Yc;
+
+let cantPuntos = 13.31;
+let radio = 1000;
+let mRadio = 10;
+let B = 500;
+let mB = 0;
+let C = 0;
+let mC = 0;
+let iteraciones = 30;
+let arr = [0, 0, 0, 0, 0, 0, 0, 0];
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    Xc = windowWidth / 2;
+    Yc = windowHeight / 2;
     background(255);
     //frameRate(1);
     //noLoop();
     noFill();
     strokeWeight(1);
     stroke(1);
-    deslizadores = new Deslizadores();
+    //deslizadores = new Deslizadores();
 }
 
 function draw() {
-    console.log(deslizadores.slMC.value());
     background(255);
-    deslizadores.texto();
-    cantPuntos = deslizadores.slPuntos.value();
-    radio = deslizadores.slRadio.value();
-    mRadio = deslizadores.slMRadio.value();
-    B = deslizadores.slB.value();
-    mB = deslizadores.slMB.value();
-    C = deslizadores.slC.value();
-    mC = deslizadores.slMC.value();
-    Xc = windowWidth / 2;
-    Yc = windowHeight / 2;
-    contador = 0;
-
-    R = radio + B * cos(C);
-    x = R * cos(0);
-    y = R * sin(0);
-
+    c = new Cardioide(arr);
+    console.log(c);
     beginShape();
-    for (j = 0; j < deslizadores.slIteraciones.value(); j++) {
-        //curveVertex(x * 0.01 + Xc, y * 0.01 + Yc);
-        for (i = 0; i < TWO_PI; i += TWO_PI / cantPuntos) {
-            //FI = i;
-            R = radio + B * cos(C * i);
+    for (j = 0; j < c.iteraciones; j++) {
+        for (i = 0; i < TWO_PI; i += TWO_PI / c.cantPuntos) {
+            R = c.radio + c.B * cos(c.C * i);
             x = R * cos(i);
             y = R * sin(i);
             curveVertex(x * 0.01 + Xc, y * 0.01 + Yc);
-            //curveVertex(x + Xc, y + Yc);
-            radio += mRadio;
-            B += mB;
-            C += mC;
-            //strokeWeight(5);
-            //point(x + Xc, y + Yc);
-            //strokeWeight(1);
+            c.radio += c.mRadio;
+            c.B += c.mB;
+            c.C += c.mC;
         }
-        //point(x + Xc, y + Yc);
     }
-    //curveVertex(x + Xc, y + Yc);
     endShape();
 }
 
-function mousePressed() {}
+function keyTyped() {
+    switch (key) {
+        // radio
+        case "R":
+            arr[1] += 100;
+            break;
+        case "r":
+            arr[1] -= 100;
+            break;
+        // modificador radio
+        case "F":
+            arr[2] += 1;
+            break;
+        case "f":
+            arr[2] -= 1;
+            break;
+        // B
+        case "e":
+            arr[3] += 1;
+            break;
+        case "d":
+            arr[3] -= 1;
+            break;
+        // modificador B
+        case "r":
+            arr[4] += 0.1;
+            break;
+        case "f":
+            arr[4] -= 0.1;
+            break;
+        // C
+        case "t":
+            arr[5] += 1;
+            break;
+        case "g":
+            arr[5] -= 1;
+            break;
+        // modificador C
+        case "y":
+            arr[6] += 0.00001;
+            break;
+        case "h":
+            arr[6] -= 0.00001;
+            break;
+        // iteraciones
+        case "i":
+            arr[7] += 1;
+            break;
+        case "k":
+            arr[7] -= 1;
+            break;
+        // puntos
+        case "u":
+            arr[0] += 1;
+            break;
+        case "j":
+            arr[0] -= 1;
+            break;
+
+        default:
+            //Statements executed when none of
+            //the values match the value of the expression
+            break;
+    }
+}
+
+class Cardioide {
+    constructor([pts, r, mr, b, mb, c, mc, it]) {
+        this.cantPuntos = 13.31 + pts;
+        this.radio = 1000 + r;
+        this.mRadio = 10 + mr;
+        this.B = 500 + b;
+        this.mB = 0 + mb;
+        this.C = 0 + c;
+        this.mC = 0 + mc;
+        this.iteraciones = 30 + it;
+    }
+}
 
 class Deslizadores {
     constructor() {
