@@ -2,14 +2,6 @@ let deslizadores;
 let Xc;
 let Yc;
 
-//let cantPuntos = 13.31;
-//let radio = 1000;
-//let mRadio = 10;
-//let B = 500;
-//let mB = 0;
-//let C = 0;
-//let mC = 0;
-//let iteraciones = 50;
 let arr = [0, 0, 0, 0, 0, 0, 0, 0];
 
 function setup() {
@@ -27,8 +19,9 @@ function setup() {
 
 function draw() {
     background(255);
+    c = 0;
     c = new Cardioide(arr);
-    console.log(c);
+    //console.log(c);
     beginShape();
     for (j = 0; j < c.iteraciones; j++) {
         for (i = 0; i < TWO_PI; i += TWO_PI / c.cantPuntos) {
@@ -83,10 +76,10 @@ function keyTyped() {
             break;
         // modificador C
         case "X":
-            arr[6] += 0.00001;
+            arr[6] += 0.0001;
             break;
         case "x":
-            arr[6] -= 0.00001;
+            arr[6] -= 0.0001;
             break;
         // iteraciones
         case "I":
@@ -97,11 +90,23 @@ function keyTyped() {
             break;
         // puntos
         case "P":
-            arr[0] += 0.75;
+            arr[0] += 1;
             break;
         case "p":
-            arr[0] -= 0.75;
-            arr[0] <= 1 ? (arr[0] = 1) : (arr[0] = arr[0]);
+            //arr[0] -= 0.75;
+            //arr[0] <= 1 ? (arr[0] = 1) : (arr[0] = arr[0]);
+
+            if ((c.cantPuntosInicial + arr[0] - 1) <= 1 ) {
+                //arr[0] = c.cantPuntos - 1;
+                console.log("reset");
+            }
+            else {
+                arr[0] -= 1;
+            }
+            console.log("ptos " + c.cantPuntosInicial);
+            console.log("arr " + arr[0]);
+            console.log("ptos + arr " + (c.cantPuntosInicial + arr[0]));
+            console.log("->->->->->->");
             break;
 
         case "Z":
@@ -111,15 +116,24 @@ function keyTyped() {
 }
 
 class Cardioide {
+    cantPuntosI = 13;
+    radioI = 1000;
+    mRadioI = 30;
+    BI = 500;
+    mBI = 1;
+    CI = 0;
+    mCI = 0;
+    iteracionesI = 50;
+
     constructor([pts, r, mr, b, mb, c, mc, it]) {
-        this.cantPuntos = 13.31 + pts;
-        this.radio = 1000 + r;
-        this.mRadio = 30 + mr;
-        this.B = 500 + b;
-        this.mB = 1 + mb;
-        this.C = 0 + c;
-        this.mC = 0 + mc;
-        this.iteraciones = 50 + it;
+        this.cantPuntos = this.cantPuntosI + pts;
+        this.radio = this.radioI + r;
+        this.mRadio = this.mRadioI + mr;
+        this.B = this.BI + b;
+        this.mB = this.mBI + mb;
+        this.C = this.CI + c;
+        this.mC = this.mCI + mc;
+        this.iteraciones = this.iteracionesI + it;
     }
 }
 
