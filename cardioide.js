@@ -2,14 +2,14 @@ let deslizadores;
 let Xc;
 let Yc;
 
-let cantPuntos = 13.31;
-let radio = 1000;
-let mRadio = 10;
-let B = 500;
-let mB = 0;
-let C = 0;
-let mC = 0;
-let iteraciones = 30;
+//let cantPuntos = 13.31;
+//let radio = 1000;
+//let mRadio = 10;
+//let B = 500;
+//let mB = 0;
+//let C = 0;
+//let mC = 0;
+//let iteraciones = 50;
 let arr = [0, 0, 0, 0, 0, 0, 0, 0];
 
 function setup() {
@@ -54,58 +54,58 @@ function keyTyped() {
             arr[1] -= 100;
             break;
         // modificador radio
-        case "F":
+        case "E":
             arr[2] += 1;
             break;
-        case "f":
+        case "e":
             arr[2] -= 1;
             break;
         // B
-        case "e":
-            arr[3] += 1;
+        case "B":
+            arr[3] += 100;
             break;
-        case "d":
-            arr[3] -= 1;
+        case "b":
+            arr[3] -= 100;
             break;
         // modificador B
-        case "r":
+        case "V":
             arr[4] += 0.1;
             break;
-        case "f":
+        case "v":
             arr[4] -= 0.1;
             break;
         // C
-        case "t":
-            arr[5] += 1;
+        case "C":
+            arr[5] += 0.35;
             break;
-        case "g":
-            arr[5] -= 1;
+        case "c":
+            arr[5] -= 0.35;
             break;
         // modificador C
-        case "y":
+        case "X":
             arr[6] += 0.00001;
             break;
-        case "h":
+        case "x":
             arr[6] -= 0.00001;
             break;
         // iteraciones
-        case "i":
+        case "I":
             arr[7] += 1;
             break;
-        case "k":
+        case "i":
             arr[7] -= 1;
             break;
         // puntos
-        case "u":
-            arr[0] += 1;
+        case "P":
+            arr[0] += 0.75;
             break;
-        case "j":
-            arr[0] -= 1;
+        case "p":
+            arr[0] -= 0.75;
+            arr[0] <= 1 ? (arr[0] = 1) : (arr[0] = arr[0]);
             break;
 
-        default:
-            //Statements executed when none of
-            //the values match the value of the expression
+        case "Z":
+            arr = [0, 0, 0, 0, 0, 0, 0, 0];
             break;
     }
 }
@@ -114,12 +114,12 @@ class Cardioide {
     constructor([pts, r, mr, b, mb, c, mc, it]) {
         this.cantPuntos = 13.31 + pts;
         this.radio = 1000 + r;
-        this.mRadio = 10 + mr;
+        this.mRadio = 30 + mr;
         this.B = 500 + b;
-        this.mB = 0 + mb;
+        this.mB = 1 + mb;
         this.C = 0 + c;
         this.mC = 0 + mc;
-        this.iteraciones = 30 + it;
+        this.iteraciones = 50 + it;
     }
 }
 
