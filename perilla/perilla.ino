@@ -1,9 +1,12 @@
-#include "button.h"
+#include <Keyboard.h> // https://www.arduino.cc/reference/en/language/functions/usb/keyboard/
+#include "button.h" // https://github.com/e-tinkers/button
 
 Button boton;
 
-#define A 2
-#define B 3
+// módulo codificador rotativo KY-040 
+#define A 2 // CLK
+#define B 3 // DT
+#define C 4 // SW
 
 int modo = 0;
 int estadoA;
@@ -12,14 +15,16 @@ int estadoPrevioA;
 void setup() { 
     pinMode (A,INPUT); // pin 2 
     pinMode (B,INPUT); // pin 3
-    boton.begin(4);
-    Serial.begin (9600);
+    boton.begin(C); // pin 4
     estadoPrevioA = digitalRead(A); 
+    Serial.begin (9600);
+    Keyboard.begin();
 } 
 
 void loop() {
     if (perillaMovida()) { 
         Serial.println(devuelveCaracter(modo));
+        Keyboard.write(devuelveCaracter(modo));
     } 
 
     if (boton.debounce()) {
@@ -34,15 +39,17 @@ int cambiaModo(int modo) {
     modo++;
     return modo > 7 ? 0 : modo;
 }
+
 // devuelve la direccón de giro
 int direccionPerilla () {
     return digitalRead(B) != estadoA ? 1 : -1; // si B es diferente a estadoA gira como el reloj
 }
 
 // devuelve true si la perilla se movio
-boolean perillaMovida() {
+bool perillaMovida() {
     estadoA = digitalRead(A); 
-    return estadoA != estadoPrevioA ? true : false; 
+    /*return estadoA != estadoPrevioA ? true : false; */
+    return (estadoA != estadoPrevioA); 
 } 
 
 // devuelve el caracter que corresponde segun el modo y la direccion
