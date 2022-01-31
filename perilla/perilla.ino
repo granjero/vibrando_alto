@@ -1,7 +1,5 @@
-#include <Keyboard.h> // https://www.arduino.cc/reference/en/language/functions/usb/keyboard/
-#include "button.h" // https://github.com/e-tinkers/button
-
-Button boton;
+/*#include <Keyboard.h> // https://www.arduino.cc/reference/en/language/functions/usb/keyboard/*/
+#include "JC_Button.h" // https://github.com/JChristensen/JC_Button
 
 // módulo codificador rotativo KY-040 
 #define A 2 // CLK
@@ -13,29 +11,34 @@ int reset = 0;
 int estadoA;
 int estadoPrevioA;  
 
+Button boton(C);
+
 void setup() { 
     pinMode (A,INPUT); // pin 2 
     pinMode (B,INPUT); // pin 3
-    boton.begin(C); // pin 4
+    boton.begin(); // pin 4
     estadoPrevioA = digitalRead(A); 
     Serial.begin (9600);
-    Keyboard.begin();
+    /*Keyboard.begin();*/
 } 
 
 void loop() {
+    boton.read();
     if (perillaMovida()) { 
         reset = 0;
         Serial.println(devuelveCaracter(modo));
-        Keyboard.write(devuelveCaracter(modo));
+        /*Keyboard.write(devuelveCaracter(modo));*/
     } 
 
-    if (boton.debounce()) {
+    if (boton.wasPressed()) {
         reset++;
         modo = cambiaModo(modo);
     }
 
     if (reset >= 5) {
-        Keyboard.write('z');
+        /*Keyboard.write('Z');*/
+        reset = 0;
+        Serial.println("Z reset");
     }
 
     estadoPrevioA = estadoA;
@@ -69,7 +72,7 @@ char devuelveCaracter(int modo) {
             return direccionPerilla() > 0 ? 'B' : 'b';
             break;
         case 2:
-            return direccionPerilla() > 0 ? 'P' : 'p';
+            return direccionPerilla() > 0 ? 'X' : 'x';
             break;
         case 3:
             return direccionPerilla() > 0 ? 'V' : 'v';
@@ -78,13 +81,13 @@ char devuelveCaracter(int modo) {
             return direccionPerilla() > 0 ? 'R' : 'r';
             break;
         case 5:
-            return direccionPerilla() > 0 ? 'X' : 'x';
+            return direccionPerilla() > 0 ? 'E' : 'e';
             break;
         case 6:
             return direccionPerilla() > 0 ? 'I' : 'i';
             break;
         case 7:
-            return direccionPerilla() > 0 ? 'E' : 'e';
+            return direccionPerilla() > 0 ? 'P' : 'p';
             break;
     }
 }
