@@ -9,19 +9,16 @@ function setup() {
     Xc = windowWidth / 2;
     Yc = windowHeight / 2;
     background(255);
-    //frameRate(1);
-    //noLoop();
+    frameRate(1);
     noFill();
     strokeWeight(1);
     stroke(1);
-    //deslizadores = new Deslizadores();
 }
 
 function draw() {
     background(255);
     c = 0;
     c = new Cardioide(arr);
-    //console.log(c);
     beginShape();
     for (j = 0; j < c.iteraciones; j++) {
         for (i = 0; i < TWO_PI; i += TWO_PI / c.cantPuntos) {
@@ -69,10 +66,10 @@ function keyTyped() {
             break;
         // C
         case "C":
-            arr[5] += 0.35;
+            arr[5] += random(0.15707, 0.31415);
             break;
         case "c":
-            arr[5] -= 0.35;
+            arr[5] -= random(0.15707, 0.31415);
             break;
         // modificador C
         case "X":
@@ -90,23 +87,23 @@ function keyTyped() {
             break;
         // puntos
         case "P":
-            arr[0] += 1;
+            arr[0] += .75;
             break;
         case "p":
             //arr[0] -= 0.75;
             //arr[0] <= 1 ? (arr[0] = 1) : (arr[0] = arr[0]);
 
-            if ((c.cantPuntosInicial + arr[0] - 1) <= 1 ) {
+            if ((c.cantPuntosI + arr[0] - .75) <= 1 ) {
                 //arr[0] = c.cantPuntos - 1;
-                console.log("reset");
+                //console.log("reset");
             }
             else {
-                arr[0] -= 1;
+                arr[0] -= .75;
             }
-            console.log("ptos " + c.cantPuntosInicial);
-            console.log("arr " + arr[0]);
-            console.log("ptos + arr " + (c.cantPuntosInicial + arr[0]));
-            console.log("->->->->->->");
+            //console.log("ptos " + c.cantPuntosI);
+            //console.log("arr " + arr[0]);
+            //console.log("ptos + arr " + (c.cantPuntosI + arr[0]));
+            //console.log("->->->->->->");
             break;
 
         case "Z":
@@ -116,8 +113,8 @@ function keyTyped() {
 }
 
 class Cardioide {
-    cantPuntosI = 13;
-    radioI = 1000;
+    cantPuntosI = 12;
+    radioI = 3000;
     mRadioI = 30;
     BI = 500;
     mBI = 1;
@@ -137,82 +134,3 @@ class Cardioide {
     }
 }
 
-class Deslizadores {
-    constructor() {
-        // radio
-        this.slRadio = createSlider(0, 10000, 1000, 10);
-        this.slRadio.position(10, 10);
-        this.slRadio.style("width", "200px");
-        // modificador radio
-        this.slMRadio = createSlider(0, 50, 1, 1);
-        this.slMRadio.position(10, 30);
-        this.slMRadio.style("width", "200px");
-        // B
-        this.slB = createSlider(0, 10000, 500, 1);
-        this.slB.position(10, 50);
-        this.slB.style("width", "200px");
-        // modificadorB
-        this.slMB = createSlider(-10, 10, 0, 0.1);
-        this.slMB.position(10, 70);
-        this.slMB.style("width", "200px");
-        // C
-        this.slC = createSlider(0, 20, 0, 0.01);
-        this.slC.position(10, 90);
-        this.slC.style("width", "200px");
-        // modificadorC
-        this.slMC = createSlider(0, 0.005, 0, 0.00001);
-        this.slMC.position(10, 110);
-        this.slMC.style("width", "200px");
-        // puntos
-        this.slPuntos = createSlider(5, 25, 13.31, 0.01);
-        this.slPuntos.position(10, 130);
-        this.slPuntos.style("width", "200px");
-        // iteraciones
-        this.slIteraciones = createSlider(1, 200, 30, 1);
-        this.slIteraciones.position(10, 150);
-        this.slIteraciones.style("width", "200px");
-    }
-
-    texto() {
-        text(
-            "radio " + this.slRadio.value(),
-            this.slRadio.x * 2 + this.slRadio.width,
-            this.slRadio.y + 15
-        );
-        text(
-            "mRadio " + this.slMRadio.value(),
-            this.slMRadio.x * 2 + this.slMRadio.width,
-            this.slMRadio.y + 15
-        );
-        text(
-            "B " + this.slB.value(),
-            this.slB.x * 2 + this.slB.width,
-            this.slB.y + 15
-        );
-        text(
-            "mB " + this.slMB.value(),
-            this.slMB.x * 2 + this.slMB.width,
-            this.slMB.y + 15
-        );
-        text(
-            "C " + this.slC.value(),
-            this.slC.x * 2 + this.slC.width,
-            this.slC.y + 15
-        );
-        text(
-            "mC " + this.slMC.value(),
-            this.slMC.x * 2 + this.slMC.width,
-            this.slMC.y + 15
-        );
-        text(
-            "puntos " + this.slPuntos.value(),
-            this.slPuntos.x * 2 + this.slPuntos.width,
-            this.slPuntos.y + 15
-        );
-        text(
-            "iteraciones " + this.slIteraciones.value(),
-            this.slIteraciones.x * 2 + this.slIteraciones.width,
-            this.slIteraciones.y + 15
-        );
-    }
-}

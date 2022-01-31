@@ -9,6 +9,7 @@ Button boton;
 #define C 4 // SW
 
 int modo = 0;
+int reset = 0;
 int estadoA;
 int estadoPrevioA;  
 
@@ -23,12 +24,18 @@ void setup() {
 
 void loop() {
     if (perillaMovida()) { 
+        reset = 0;
         Serial.println(devuelveCaracter(modo));
         Keyboard.write(devuelveCaracter(modo));
     } 
 
     if (boton.debounce()) {
+        reset++;
         modo = cambiaModo(modo);
+    }
+
+    if (reset >= 5) {
+        Keyboard.write('z');
     }
 
     estadoPrevioA = estadoA;
@@ -56,19 +63,19 @@ bool perillaMovida() {
 char devuelveCaracter(int modo) {
     switch (modo) {
         case 0:
-            return direccionPerilla() > 0 ? 'R' : 'r';
+            return direccionPerilla() > 0 ? 'C' : 'c';
             break;
         case 1:
-            return direccionPerilla() > 0 ? 'E' : 'e';
+            return direccionPerilla() > 0 ? 'B' : 'b';
             break;
         case 2:
-            return direccionPerilla() > 0 ? 'B' : 'b';
+            return direccionPerilla() > 0 ? 'P' : 'p';
             break;
         case 3:
             return direccionPerilla() > 0 ? 'V' : 'v';
             break;
         case 4:
-            return direccionPerilla() > 0 ? 'C' : 'c';
+            return direccionPerilla() > 0 ? 'R' : 'r';
             break;
         case 5:
             return direccionPerilla() > 0 ? 'X' : 'x';
@@ -77,7 +84,7 @@ char devuelveCaracter(int modo) {
             return direccionPerilla() > 0 ? 'I' : 'i';
             break;
         case 7:
-            return direccionPerilla() > 0 ? 'P' : 'p';
+            return direccionPerilla() > 0 ? 'E' : 'e';
             break;
     }
 }
