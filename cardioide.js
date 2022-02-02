@@ -1,4 +1,5 @@
-let deslizadores;
+let timer;
+let tiempo;
 let Xc;
 let Yc;
 
@@ -9,7 +10,6 @@ function setup() {
     Xc = windowWidth / 2;
     Yc = windowHeight / 2;
     background(255);
-    frameRate(1);
     noFill();
     strokeWeight(1);
     stroke(1);
@@ -17,24 +17,17 @@ function setup() {
 
 function draw() {
     background(255);
+    timer = millis();
     c = 0;
     c = new Cardioide(arr);
-    beginShape();
-    for (j = 0; j < c.iteraciones; j++) {
-        for (i = 0; i < TWO_PI; i += TWO_PI / c.cantPuntos) {
-            R = c.radio + c.B * cos(c.C * i);
-            x = R * cos(i);
-            y = R * sin(i);
-            curveVertex(x * 0.01 + Xc, y * 0.01 + Yc);
-            c.radio += c.mRadio;
-            c.B += c.mB;
-            c.C += c.mC;
-        }
+    c.dibuja();
+    if (timer - tiempo <= 3000) {
+        text(key, 10, 10);
     }
-    endShape();
 }
 
 function keyTyped() {
+    tiempo = millis();
     switch (key) {
         // radio
         case "R":
@@ -66,10 +59,10 @@ function keyTyped() {
             break;
         // C
         case "C":
-            arr[5] += random(0.15707, 0.31415);
+            arr[5] += random(0.15);
             break;
         case "c":
-            arr[5] -= random(0.15707, 0.31415);
+            arr[5] -= random(0.15);
             break;
         // modificador C
         case "X":
@@ -87,23 +80,13 @@ function keyTyped() {
             break;
         // puntos
         case "P":
-            arr[0] += .75;
+            arr[0] += 0.75;
             break;
         case "p":
-            //arr[0] -= 0.75;
-            //arr[0] <= 1 ? (arr[0] = 1) : (arr[0] = arr[0]);
-
-            if ((c.cantPuntosI + arr[0] - .75) <= 1 ) {
-                //arr[0] = c.cantPuntos - 1;
-                //console.log("reset");
+            if (c.cantPuntosI + arr[0] - 0.75 <= 1) {
+            } else {
+                arr[0] -= 0.75;
             }
-            else {
-                arr[0] -= .75;
-            }
-            //console.log("ptos " + c.cantPuntosI);
-            //console.log("arr " + arr[0]);
-            //console.log("ptos + arr " + (c.cantPuntosI + arr[0]));
-            //console.log("->->->->->->");
             break;
 
         case "Z":
@@ -132,5 +115,20 @@ class Cardioide {
         this.mC = this.mCI + mc;
         this.iteraciones = this.iteracionesI + it;
     }
-}
 
+    dibuja() {
+        beginShape();
+        for (let j = 0; j < this.iteraciones; j++) {
+            for (let i = 0; i < TWO_PI; i += TWO_PI / this.cantPuntos) {
+                let R = this.radio + this.B * cos(this.C * i);
+                let x = R * cos(i);
+                let y = R * sin(i);
+                curveVertex(x * 0.01 + Xc, y * 0.01 + Yc);
+                this.radio += this.mRadio;
+                this.B += this.mB;
+                this.C += this.mC;
+            }
+        }
+        endShape();
+    }
+}

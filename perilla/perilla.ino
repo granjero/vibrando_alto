@@ -1,4 +1,4 @@
-/*#include <Keyboard.h> // https://www.arduino.cc/reference/en/language/functions/usb/keyboard/*/
+#include <Keyboard.h> // https://www.arduino.cc/reference/en/language/functions/usb/keyboard/
 #include "JC_Button.h" // https://github.com/JChristensen/JC_Button
 
 // módulo codificador rotativo KY-040 
@@ -19,7 +19,7 @@ void setup() {
     boton.begin(); // pin 4
     estadoPrevioA = digitalRead(A); 
     Serial.begin (9600);
-    /*Keyboard.begin();*/
+    Keyboard.begin();
 } 
 
 void loop() {
@@ -27,7 +27,7 @@ void loop() {
     if (perillaMovida()) { 
         reset = 0;
         Serial.println(devuelveCaracter(modo));
-        /*Keyboard.write(devuelveCaracter(modo));*/
+        Keyboard.write(devuelveCaracter(modo));
     } 
 
     if (boton.wasPressed()) {
@@ -36,7 +36,7 @@ void loop() {
     }
 
     if (reset >= 5) {
-        /*Keyboard.write('Z');*/
+        Keyboard.write('Z');
         reset = 0;
         Serial.println("Z reset");
     }
