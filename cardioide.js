@@ -9,14 +9,14 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
     Xc = windowWidth / 2;
     Yc = windowHeight / 2;
-    background(255);
+    background(235);
     noFill();
     strokeWeight(1);
     stroke(1);
 }
 
 function draw() {
-    background(255);
+    background(250);
     timer = millis();
     c = 0;
     c = new Cardioide(arr);
@@ -59,10 +59,10 @@ function keyTyped() {
             break;
         // C
         case "C":
-            arr[5] += random(0.15);
+            arr[5] += 0.15;
             break;
         case "c":
-            arr[5] -= random(0.15);
+            arr[5] -= 0.15;
             break;
         // modificador C
         case "X":
