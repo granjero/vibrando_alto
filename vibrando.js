@@ -9,7 +9,7 @@ function setup() {
     createCanvas(1366, 768);
     Xc = 1366 / 2;
     Yc = 768 / 2;
-    background(235);
+    background(222);
     noFill();
     strokeWeight(1);
     stroke(1);
@@ -17,14 +17,14 @@ function setup() {
 }
 
 function draw() {
-    background(200);
+    background(222);
     timer = millis();
     vibrando = 0;
     vibrando = new Vibrante(arr);
     vibrando.dibuja();
-    if (timer - tiempo <= 3000) {
-        text(key, 10, 10);
-    }
+    //if (timer - tiempo <= 3000) {
+        //text(key, 10, 10);
+    //}
     //debug(vibrando);
 }
 
