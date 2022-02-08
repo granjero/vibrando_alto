@@ -6,28 +6,31 @@ let Yc;
 let arr = [0, 0, 0, 0, 0, 0, 0, 0];
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    Xc = windowWidth / 2;
-    Yc = windowHeight / 2;
+    createCanvas(1366, 768);
+    Xc = 1366 / 2;
+    Yc = 768 / 2;
     background(235);
     noFill();
     strokeWeight(1);
     stroke(1);
+    noLoop();
 }
 
 function draw() {
-    background(250);
+    background(200);
     timer = millis();
-    c = 0;
-    c = new Cardioide(arr);
-    c.dibuja();
+    vibrando = 0;
+    vibrando = new Vibrante(arr);
+    vibrando.dibuja();
     if (timer - tiempo <= 3000) {
         text(key, 10, 10);
     }
+    //debug(vibrando);
 }
 
 function keyTyped() {
     tiempo = millis();
+    let puntos = .5;
     switch (key) {
         // radio
         case "R":
@@ -59,10 +62,10 @@ function keyTyped() {
             break;
         // C
         case "C":
-            arr[5] += 0.15;
+            arr[5] += 0.09;
             break;
         case "c":
-            arr[5] -= 0.15;
+            arr[5] -= 0.09;
             break;
         // modificador C
         case "X":
@@ -80,22 +83,25 @@ function keyTyped() {
             break;
         // puntos
         case "P":
-            arr[0] += 0.75;
+            arr[0] += puntos;
             break;
         case "p":
-            if (c.cantPuntosI + arr[0] - 0.75 <= 1) {
-            } else {
-                arr[0] -= 0.75;
+            arr[0] -= puntos;
+            if (arr[0] <= -vibrando.cantPuntosI) {
+                arr[0] += puntos;
             }
             break;
 
         case "Z":
-            arr = [0, 0, 0, 0, 0, 0, 0, 0];
+            window.location.reload();
+            //arr = [0, 0, 0, 0, 0, 0, 0, 0];
+
             break;
     }
+    redraw();
 }
 
-class Cardioide {
+class Vibrante {
     cantPuntosI = 12;
     radioI = 3000;
     mRadioI = 30;
@@ -110,7 +116,7 @@ class Cardioide {
         this.radio = this.radioI + r;
         this.mRadio = this.mRadioI + mr;
         this.B = this.BI + b;
-        this.mB = this.mBI + mb;
+        this.mB = this.mBI +mb;
         this.C = this.CI + c;
         this.mC = this.mCI + mc;
         this.iteraciones = this.iteracionesI + it;
@@ -121,9 +127,9 @@ class Cardioide {
         for (let j = 0; j < this.iteraciones; j++) {
             for (let i = 0; i < TWO_PI; i += TWO_PI / this.cantPuntos) {
                 let R = this.radio + this.B * cos(this.C * i);
-                let x = R * cos(i);
-                let y = R * sin(i);
-                curveVertex(x * 0.01 + Xc, y * 0.01 + Yc);
+                let x = R * cos(i) / 100;
+                let y = R * sin(i) / 100;
+                curveVertex(x + Xc, y + Yc);
                 this.radio += this.mRadio;
                 this.B += this.mB;
                 this.C += this.mC;
@@ -131,4 +137,26 @@ class Cardioide {
         }
         endShape();
     }
+}
+
+function debug(vibrando) {
+    let y = 100;
+    text('cant Puntos:  ' + vibrando.cantPuntos, 50, y += 20);
+    text('radio:             ' + vibrando.radio, 50, y += 20);
+    text('mod radio:         ' + vibrando.mRadio, 50, y += 20);
+    text('B:                    ' + vibrando.B, 50, y += 20);
+    text('mod B:           ' + vibrando.mB, 50, y += 20);
+    text('C:                   ' + vibrando.C, 50, y += 20);
+    text('mod C:           ' + vibrando.mC, 50, y += 20);
+    text('iteraciones:    ' + vibrando.iteraciones, 50, y += 20);
+
+    text('ARAY', 50, y += 30);
+    text('cant Puntos:  ' + arr[0], 50, y += 20);
+    text('radio:             ' + arr[1], 50, y += 20);
+    text('mod radio:         ' + arr[2], 50, y += 20);
+    text('B:                    ' + arr[3], 50, y += 20);
+    text('mod B:           ' + arr[4], 50, y += 20);
+    text('C:                   ' + arr[5], 50, y += 20);
+    text('mod C:           ' + arr[6], 50, y += 20);
+    text('iteraciones:    ' + arr[7], 50, y += 20);
 }
