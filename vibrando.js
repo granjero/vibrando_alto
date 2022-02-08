@@ -1,5 +1,5 @@
 let timer;
-let tiempo;
+let tiempo = 0;
 let Xc;
 let Yc;
 
@@ -18,85 +18,87 @@ function setup() {
 
 function draw() {
     background(222);
-    timer = millis();
     vibrando = 0;
     vibrando = new Vibrante(arr);
     vibrando.dibuja();
-    //if (timer - tiempo <= 3000) {
-        //text(key, 10, 10);
-    //}
+    //text(key, 10, 10);
+    //text("timer " + timer, 10, 30);
+    //text("tiempo " + tiempo, 10, 50);
+    //text("timer - tiempo " + (timer - tiempo), 10, 70);
+    //text("tiempo - timer " + (tiempo - timer), 10, 90);
     //debug(vibrando);
 }
 
 function keyTyped() {
-    tiempo = millis();
-    let puntos = .5;
-    switch (key) {
-        // radio
-        case "R":
-            arr[1] += 100;
-            break;
-        case "r":
-            arr[1] -= 100;
-            break;
-        // modificador radio
-        case "E":
-            arr[2] += 1;
-            break;
-        case "e":
-            arr[2] -= 1;
-            break;
-        // B
-        case "B":
-            arr[3] += 100;
-            break;
-        case "b":
-            arr[3] -= 100;
-            break;
-        // modificador B
-        case "V":
-            arr[4] += 0.1;
-            break;
-        case "v":
-            arr[4] -= 0.1;
-            break;
-        // C
-        case "C":
-            arr[5] += 0.09;
-            break;
-        case "c":
-            arr[5] -= 0.09;
-            break;
-        // modificador C
-        case "X":
-            arr[6] += 0.0001;
-            break;
-        case "x":
-            arr[6] -= 0.0001;
-            break;
-        // iteraciones
-        case "I":
-            arr[7] += 1;
-            break;
-        case "i":
-            arr[7] -= 1;
-            break;
-        // puntos
-        case "P":
-            arr[0] += puntos;
-            break;
-        case "p":
-            arr[0] -= puntos;
-            if (arr[0] <= -vibrando.cantPuntosI) {
+    timer = millis();
+    // 300 milisegundos entre tecla y tecla
+    if (timer - tiempo >= 300) {
+        let puntos = 0.5;
+        switch (key) {
+            // radio
+            case "R":
+                arr[1] += 100;
+                break;
+            case "r":
+                arr[1] -= 100;
+                break;
+            // modificador radio
+            case "E":
+                arr[2] += 1;
+                break;
+            case "e":
+                arr[2] -= 1;
+                break;
+            // B
+            case "B":
+                arr[3] += 100;
+                break;
+            case "b":
+                arr[3] -= 100;
+                break;
+            // modificador B
+            case "V":
+                arr[4] += 0.1;
+                break;
+            case "v":
+                arr[4] -= 0.1;
+                break;
+            // C
+            case "C":
+                arr[5] += 0.09;
+                break;
+            case "c":
+                arr[5] -= 0.09;
+                break;
+            // modificador C
+            case "X":
+                arr[6] += 0.0001;
+                break;
+            case "x":
+                arr[6] -= 0.0001;
+                break;
+            // iteraciones
+            case "I":
+                arr[7] += 1;
+                break;
+            case "i":
+                arr[7] -= 1;
+                break;
+            // puntos
+            case "P":
                 arr[0] += puntos;
-            }
-            break;
-
-        case "Z":
-            window.location.reload();
-            //arr = [0, 0, 0, 0, 0, 0, 0, 0];
-
-            break;
+                break;
+            case "p":
+                arr[0] -= puntos;
+                if (arr[0] <= -vibrando.cantPuntosI) {
+                    arr[0] += puntos;
+                }
+                break;
+            case "Z":
+                window.location.reload();
+                break;
+        }
+        tiempo = millis();
     }
     redraw();
 }
@@ -116,7 +118,7 @@ class Vibrante {
         this.radio = this.radioI + r;
         this.mRadio = this.mRadioI + mr;
         this.B = this.BI + b;
-        this.mB = this.mBI +mb;
+        this.mB = this.mBI + mb;
         this.C = this.CI + c;
         this.mC = this.mCI + mc;
         this.iteraciones = this.iteracionesI + it;
@@ -127,8 +129,8 @@ class Vibrante {
         for (let j = 0; j < this.iteraciones; j++) {
             for (let i = 0; i < TWO_PI; i += TWO_PI / this.cantPuntos) {
                 let R = this.radio + this.B * cos(this.C * i);
-                let x = R * cos(i) / 100;
-                let y = R * sin(i) / 100;
+                let x = (R * cos(i)) / 100;
+                let y = (R * sin(i)) / 100;
                 curveVertex(x + Xc, y + Yc);
                 this.radio += this.mRadio;
                 this.B += this.mB;
@@ -141,22 +143,22 @@ class Vibrante {
 
 function debug(vibrando) {
     let y = 100;
-    text('cant Puntos:  ' + vibrando.cantPuntos, 50, y += 20);
-    text('radio:             ' + vibrando.radio, 50, y += 20);
-    text('mod radio:         ' + vibrando.mRadio, 50, y += 20);
-    text('B:                    ' + vibrando.B, 50, y += 20);
-    text('mod B:           ' + vibrando.mB, 50, y += 20);
-    text('C:                   ' + vibrando.C, 50, y += 20);
-    text('mod C:           ' + vibrando.mC, 50, y += 20);
-    text('iteraciones:    ' + vibrando.iteraciones, 50, y += 20);
+    text("cant Puntos:  " + vibrando.cantPuntos, 50, (y += 20));
+    text("radio:             " + vibrando.radio, 50, (y += 20));
+    text("mod radio:         " + vibrando.mRadio, 50, (y += 20));
+    text("B:                    " + vibrando.B, 50, (y += 20));
+    text("mod B:           " + vibrando.mB, 50, (y += 20));
+    text("C:                   " + vibrando.C, 50, (y += 20));
+    text("mod C:           " + vibrando.mC, 50, (y += 20));
+    text("iteraciones:    " + vibrando.iteraciones, 50, (y += 20));
 
-    text('ARAY', 50, y += 30);
-    text('cant Puntos:  ' + arr[0], 50, y += 20);
-    text('radio:             ' + arr[1], 50, y += 20);
-    text('mod radio:         ' + arr[2], 50, y += 20);
-    text('B:                    ' + arr[3], 50, y += 20);
-    text('mod B:           ' + arr[4], 50, y += 20);
-    text('C:                   ' + arr[5], 50, y += 20);
-    text('mod C:           ' + arr[6], 50, y += 20);
-    text('iteraciones:    ' + arr[7], 50, y += 20);
+    text("ARAY", 50, (y += 30));
+    text("cant Puntos:  " + arr[0], 50, (y += 20));
+    text("radio:             " + arr[1], 50, (y += 20));
+    text("mod radio:         " + arr[2], 50, (y += 20));
+    text("B:                    " + arr[3], 50, (y += 20));
+    text("mod B:           " + arr[4], 50, (y += 20));
+    text("C:                   " + arr[5], 50, (y += 20));
+    text("mod C:           " + arr[6], 50, (y += 20));
+    text("iteraciones:    " + arr[7], 50, (y += 20));
 }
