@@ -38,7 +38,8 @@ void loop() {
     if (reset >= 5) {
         Keyboard.write('Z');
         reset = 0;
-        Serial.println("Z reset");
+        modo = 0;
+        /*Serial.println("Z reset");*/
     }
 
     estadoPrevioA = estadoA;

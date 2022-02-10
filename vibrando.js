@@ -1,14 +1,16 @@
-let timer;
-let tiempo = 0;
-let Xc;
-let Yc;
+let tiempoPulsacion;
+let XCentro;
+let YCentro;
 
-let arr = [0, 0, 0, 0, 0, 0, 0, 0];
+let arr = Array(8).fill(0); // cantPuntosI, radio, modificadorRadioI, BI, mBI, CI, modificadorCI, iteracionesI
+let valoresInicio = [12, 3000, 30, 500, 1, 0, 0, 50];
 
 function setup() {
+    XCentro = 1366 / 2;
+    YCentro = 768 / 2;
+    tiempoPulsacion = 0;
+
     createCanvas(1366, 768);
-    Xc = 1366 / 2;
-    Yc = 768 / 2;
     background(222);
     noFill();
     strokeWeight(1);
@@ -18,23 +20,86 @@ function setup() {
 
 function draw() {
     background(222);
-    vibrando = 0;
-    vibrando = new Vibrante(arr);
+
+    let vibrando = 0;
+    vibrando = new Vibrante(valoresInicio, arr);
     vibrando.dibuja();
-    //text(key, 10, 10);
-    //text("timer " + timer, 10, 30);
-    //text("tiempo " + tiempo, 10, 50);
-    //text("timer - tiempo " + (timer - tiempo), 10, 70);
-    //text("tiempo - timer " + (tiempo - timer), 10, 90);
     //debug(vibrando);
 }
 
+class Vibrante {
+    cantPuntos;
+    radio;
+    modificadorRadio;
+    B;
+    modificadorB;
+    C;
+    modificadorC;
+    iteraciones;
+
+    constructor(
+        [
+            cantPuntosI,
+            radioI,
+            modificadorRadioI,
+            BI,
+            modificadorBI,
+            CI,
+            modificadorCI,
+            iteracionesI,
+        ],
+        [pts, r, mr, b, mb, c, mc, it]
+    ) {
+        this.cantPuntos = cantPuntosI + pts;
+        this.radio = radioI + r;
+        this.modificadorRadio = modificadorRadioI + mr;
+        this.B = BI + b;
+        this.modificadorB = modificadorBI + mb;
+        this.C = CI + c;
+        this.modificadorC = modificadorCI + mc;
+        this.iteraciones = iteracionesI + it;
+    }
+
+    dibuja() {
+        beginShape();
+        for (let j = 0; j < this.iteraciones; j++) {
+            for (let i = 0; i < TWO_PI; i += TWO_PI / this.cantPuntos) {
+                let R = this.radio + this.B * cos(this.C * i);
+                let x = (R * cos(i)) / 100;
+                let y = (R * sin(i)) / 100;
+                curveVertex(x + XCentro, y + YCentro);
+                this.radio += this.modificadorRadio;
+                this.B += this.modificadorB;
+                this.C += this.modificadorC;
+            }
+        }
+        endShape();
+    }
+}
+
+function arrayAlAzar() {
+    //console.log("azar");
+    return [
+        floor(random(-8, 25)), // cantPuntos
+        floor(random(-1000, 1000)), // radio
+        floor(random(-20, 3)), // modificador radio
+        floor(random(-500, 500)), // B
+        random(-3, 3), // modificador B
+        random(-10, 10), // C
+        random(-1, 1), // modificador C
+        floor(random(-20, 25)), // iteraciones
+    ];
+}
+
 function keyTyped() {
-    timer = millis();
-    // 300 milisegundos entre tecla y tecla
-    if (timer - tiempo >= 300) {
+    // 100 milisegundos entre tecla y tecla
+    if (millis() > tiempoPulsacion + 100) {
         let puntos = 0.5;
         switch (key) {
+            // valores al azar
+            case "A":
+                arr = arrayAlAzar();
+                break;
             // radio
             case "R":
                 arr[1] += 100;
@@ -80,6 +145,10 @@ function keyTyped() {
             // iteraciones
             case "I":
                 arr[7] += 1;
+                // moximo
+                if (arr[7] >= valoresInicio[7] + 50) {
+                    arr[7] -= 1;
+                }
                 break;
             case "i":
                 arr[7] -= 1;
@@ -87,10 +156,15 @@ function keyTyped() {
             // puntos
             case "P":
                 arr[0] += puntos;
+                // maximo
+                if (arr[0] >= valoresInicio[0] + 30) {
+                    arr[0] -= puntos;
+                }
                 break;
             case "p":
                 arr[0] -= puntos;
-                if (arr[0] <= -vibrando.cantPuntosI) {
+                // minimo
+                if (arr[0] <= -valoresInicio[0]) {
                     arr[0] += puntos;
                 }
                 break;
@@ -98,65 +172,27 @@ function keyTyped() {
                 window.location.reload();
                 break;
         }
-        tiempo = millis();
+        tiempoPulsacion = millis();
     }
     redraw();
 }
 
-class Vibrante {
-    cantPuntosI = 12;
-    radioI = 3000;
-    mRadioI = 30;
-    BI = 500;
-    mBI = 1;
-    CI = 0;
-    mCI = 0;
-    iteracionesI = 50;
-
-    constructor([pts, r, mr, b, mb, c, mc, it]) {
-        this.cantPuntos = this.cantPuntosI + pts;
-        this.radio = this.radioI + r;
-        this.mRadio = this.mRadioI + mr;
-        this.B = this.BI + b;
-        this.mB = this.mBI + mb;
-        this.C = this.CI + c;
-        this.mC = this.mCI + mc;
-        this.iteraciones = this.iteracionesI + it;
-    }
-
-    dibuja() {
-        beginShape();
-        for (let j = 0; j < this.iteraciones; j++) {
-            for (let i = 0; i < TWO_PI; i += TWO_PI / this.cantPuntos) {
-                let R = this.radio + this.B * cos(this.C * i);
-                let x = (R * cos(i)) / 100;
-                let y = (R * sin(i)) / 100;
-                curveVertex(x + Xc, y + Yc);
-                this.radio += this.mRadio;
-                this.B += this.mB;
-                this.C += this.mC;
-            }
-        }
-        endShape();
-    }
-}
-
-function debug(vibrando) {
+function debug(objeto) {
     let y = 100;
-    text("cant Puntos:  " + vibrando.cantPuntos, 50, (y += 20));
-    text("radio:             " + vibrando.radio, 50, (y += 20));
-    text("mod radio:         " + vibrando.mRadio, 50, (y += 20));
-    text("B:                    " + vibrando.B, 50, (y += 20));
-    text("mod B:           " + vibrando.mB, 50, (y += 20));
-    text("C:                   " + vibrando.C, 50, (y += 20));
-    text("mod C:           " + vibrando.mC, 50, (y += 20));
-    text("iteraciones:    " + vibrando.iteraciones, 50, (y += 20));
+    text("cant Puntos:  " + objeto.cantPuntos, 50, (y += 20));
+    text("radio:              " + objeto.radio, 50, (y += 20));
+    text("mod radio:      " + objeto.modificadorRadio, 50, (y += 20));
+    text("B:                    " + objeto.B, 50, (y += 20));
+    text("mod B:           " + objeto.modificadorB, 50, (y += 20));
+    text("C:                   " + objeto.C, 50, (y += 20));
+    text("mod C:           " + objeto.modificadorC, 50, (y += 20));
+    text("iteraciones:    " + objeto.iteraciones, 50, (y += 20));
 
     text("ARAY", 50, (y += 30));
     text("cant Puntos:  " + arr[0], 50, (y += 20));
     text("radio:             " + arr[1], 50, (y += 20));
-    text("mod radio:         " + arr[2], 50, (y += 20));
-    text("B:                    " + arr[3], 50, (y += 20));
+    text("mod radio:     " + arr[2], 50, (y += 20));
+    text("B:                   " + arr[3], 50, (y += 20));
     text("mod B:           " + arr[4], 50, (y += 20));
     text("C:                   " + arr[5], 50, (y += 20));
     text("mod C:           " + arr[6], 50, (y += 20));
