@@ -10,6 +10,7 @@ int modo = 0;
 int reset = 0;
 int estadoA;
 int estadoPrevioA;  
+boolean habilitado = true;
 
 Button boton(C);
 
@@ -18,15 +19,28 @@ void setup() {
     pinMode (B,INPUT); // pin 3
     boton.begin(); // pin 4
     estadoPrevioA = digitalRead(A); 
-    Serial.begin (9600);
+    /*Serial.begin (9600);*/
     Keyboard.begin();
 } 
 
 void loop() {
     boton.read();
+
+    // Si el botón se presiona por 3 segundos
+    if (boton.pressedFor(3000) && habilitado) {
+        habilitado = !habilitado;
+        Keyboard.write('A');
+        reset = 0;
+        modo = 0;
+    }
+
+    //  rehabilita a los 5 segundos 
+    if(millis() - boton.lastChange() >= 5000 && !habilitado) {
+        habilitado = !habilitado;
+    }
+
     if (perillaMovida()) { 
         reset = 0;
-        Serial.println(devuelveCaracter(modo));
         Keyboard.write(devuelveCaracter(modo));
     } 
 
@@ -39,7 +53,6 @@ void loop() {
         Keyboard.write('Z');
         reset = 0;
         modo = 0;
-        /*Serial.println("Z reset");*/
     }
 
     estadoPrevioA = estadoA;
